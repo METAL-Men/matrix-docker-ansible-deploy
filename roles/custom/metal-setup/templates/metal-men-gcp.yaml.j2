@@ -1,0 +1,13 @@
+id: "{{metal_gcp_application_service.id}}"
+url: "{{metal_gcp_application_service.url}}"
+as_token: "{{metal_gcp_application_service.as_token}}"
+hs_token: "{{metal_gcp_application_service.hs_token}}"
+sender_localpart: "_metal_bot"
+namespaces:
+  users:
+    - exclusive: true
+      regex: "@_metal_bot.*"
+  aliases:
+    - exclusive: true
+      regex: "#all-member-discussion:metal.men"
+  rooms: []

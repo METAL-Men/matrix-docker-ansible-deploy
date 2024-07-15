@@ -1,0 +1,12 @@
+---
+# vars file for metal-setup
+
+metal_docker_username: "jalalmetalmen"
+metal_docker_email: "jalal@metal.men"
+metal_docker_access_token: "{{ DOCKER_ACCESS_TOKEN }}"
+
+metal_gcp_application_service:
+  id: "metal-men-gcp"
+  url: "{{ API_BASE_URL }}/matrix"
+  as_token: "{{ AS_TOKEN }}"
+  hs_token: "{{ GCP_ACCESS_TOKEN }}"

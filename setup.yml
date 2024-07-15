@@ -3,6 +3,9 @@
   hosts: "{{ target if target is defined else 'matrix_servers' }}"
   become: true
 
+  vars_files:
+    - environment_vars.yml
+
   roles:
     # Most of the roles below are not distributed with the playbook, but downloaded separately using `ansible-galaxy` via the `just roles` command (see `justfile`).
     - role: galaxy/playbook_help
@@ -24,6 +27,11 @@
         - setup-all
         - install-docker
         - install-all
+
+    - role: custom/metal-setup
+      tags:
+        - setup-docker
+        - setup-all
 
     - when: devture_docker_sdk_for_python_installation_enabled | bool
       role: galaxy/docker_sdk_for_python

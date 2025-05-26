@@ -1,3 +1,17 @@
+# SPDX-FileCopyrightText: 2022 - 2023 MDAD project contributors
+# SPDX-FileCopyrightText: 2022 - 2025 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2022 Aaron Raimist
+# SPDX-FileCopyrightText: 2022 Darren Rambaud
+# SPDX-FileCopyrightText: 2022 Jip J. Dekker
+# SPDX-FileCopyrightText: 2022 Marko Weltzer
+# SPDX-FileCopyrightText: 2022 Nikita Chernyi
+# SPDX-FileCopyrightText: 2022 Shaleen Jain
+# SPDX-FileCopyrightText: 2023 Isaiah Becker-Mayer
+# SPDX-FileCopyrightText: 2023 Samuel Meenzen
+# SPDX-FileCopyrightText: 2024 Suguru Hirahara
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 ---
 # Dendrite is a second-generation Matrix homeserver currently in Beta
 # Project source code URL: https://github.com/matrix-org/dendrite
@@ -10,10 +24,12 @@ matrix_dendrite_container_image_self_build: false
 matrix_dendrite_container_image_self_build_repo: "https://github.com/matrix-org/dendrite.git"
 
 matrix_dendrite_docker_image_path: "matrixdotorg/dendrite-monolith"
-matrix_dendrite_docker_image: "{{ matrix_dendrite_docker_image_name_prefix }}{{ matrix_dendrite_docker_image_path }}:{{ matrix_dendrite_docker_image_tag }}"
-matrix_dendrite_docker_image_name_prefix: "{{ 'localhost/' if matrix_dendrite_container_image_self_build else matrix_container_global_registry_prefix }}"
+matrix_dendrite_docker_image: "{{ matrix_dendrite_docker_image_registry_prefix }}{{ matrix_dendrite_docker_image_path }}:{{ matrix_dendrite_docker_image_tag }}"
+matrix_dendrite_docker_image_registry_prefix: "{{ 'localhost/' if matrix_dendrite_container_image_self_build else matrix_dendrite_docker_image_registry_prefix_upstream }}"
+matrix_dendrite_docker_image_registry_prefix_upstream: "{{ matrix_dendrite_docker_image_registry_prefix_upstream_default }}"
+matrix_dendrite_docker_image_registry_prefix_upstream_default: docker.io/
 # renovate: datasource=docker depName=matrixdotorg/dendrite-monolith
-matrix_dendrite_docker_image_tag: "v0.13.7"
+matrix_dendrite_docker_image_tag: "v0.14.1"
 matrix_dendrite_docker_image_force_pull: "{{ matrix_dendrite_docker_image.endswith(':latest') }}"
 
 matrix_dendrite_base_path: "{{ matrix_base_data_path }}/dendrite"
@@ -199,9 +215,9 @@ matrix_dendrite_systemd_service_post_start_delay_seconds: 3
 
 # Specifies which template files to use when configuring Dendrite.
 # If you'd like to have your own different configuration, feel free to copy and paste
-# the original files into your inventory (e.g. in `inventory/host_vars/<host>/`)
+# the original files into your inventory (e.g. in `inventory/host_vars/matrix.example.com/`)
 # and then change the specific host's `vars.yml` file like this:
-# matrix_dendrite_template_dendrite_config: "{{ playbook_dir }}/inventory/host_vars/<host>/dendrite.yaml.j2"
+# matrix_dendrite_template_dendrite_config: "{{ playbook_dir }}/inventory/host_vars/matrix.example.com/dendrite.yaml.j2"
 matrix_dendrite_template_dendrite_config: "{{ role_path }}/templates/dendrite.yaml.j2"
 
 matrix_dendrite_client_api_registration_shared_secret: ""
@@ -223,6 +239,9 @@ matrix_dendrite_client_api_rate_limiting_cooloff_ms: 500
 
 # Controls whether people with access to the homeserver can register by themselves.
 matrix_dendrite_client_api_registration_disabled: true
+
+# Controls whether guest accounts are disabled
+matrix_dendrite_guests_disabled: true
 
 # reCAPTCHA API for validating registration attempts
 matrix_dendrite_client_api_enable_registration_captcha: false
@@ -321,7 +340,7 @@ matrix_dendrite_configuration_extension_yaml: |
   # server_notices:
   #   system_mxid_localpart: notices
   #   system_mxid_display_name: "Server Notices"
-  #   system_mxid_avatar_url: "mxc://server.com/oumMVlgDnLYFaPVkExemNVVZ"
+  #   system_mxid_avatar_url: "mxc://example.com/oumMVlgDnLYFaPVkExemNVVZ"
   #   room_name: "Server Notices"
 
 matrix_dendrite_configuration_extension: "{{ matrix_dendrite_configuration_extension_yaml | from_yaml if matrix_dendrite_configuration_extension_yaml | from_yaml is mapping else {} }}"

@@ -29,7 +29,7 @@ matrix_hookshot_container_additional_networks_auto: []
 matrix_hookshot_container_additional_networks_custom: []
 
 # renovate: datasource=docker depName=halfshot/matrix-hookshot
-matrix_hookshot_version: 7.0.0
+matrix_hookshot_version: 7.2.0
 
 matrix_hookshot_docker_image: "{{ matrix_hookshot_docker_image_registry_prefix }}matrix-org/matrix-hookshot:{{ matrix_hookshot_version }}"
 matrix_hookshot_docker_image_registry_prefix: "{{ 'localhost/' if matrix_hookshot_container_image_self_build else matrix_hookshot_docker_image_registry_prefix_upstream }}"
@@ -74,7 +74,7 @@ matrix_hookshot_cache_redisUri: "{{ ('redis://' + matrix_hookshot_cache_redis_ho
 # - support to also be enabled in the homeserver, see the documentation of Hookshot.
 # - Hookshot to be pointed at a Redis instance via the `matrix_hookshot_cache_redis*` variables.
 # See: https://matrix-org.github.io/matrix-hookshot/latest/advanced/encryption.html
-matrix_hookshot_encryption_enabled: false
+matrix_hookshot_encryption_enabled: "{{ matrix_bridges_encryption_enabled }}"
 
 # Controls whether metrics are enabled in the bridge configuration.
 # Enabling them is usually enough for a local (in-container) Prometheus to consume them.
@@ -181,6 +181,9 @@ matrix_hookshot_generic_urlPrefix: "{{ matrix_hookshot_urlprefix }}{{ matrix_hoo
 matrix_hookshot_generic_userIdPrefix: '_webhooks_'  # noqa var-naming
 matrix_hookshot_generic_allowJsTransformationFunctions: false  # noqa var-naming
 matrix_hookshot_generic_waitForComplete: false  # noqa var-naming
+matrix_hookshot_generic_sendExpiryNotice: false  # noqa var-naming
+matrix_hookshot_generic_requireExpiryTime: false  # noqa var-naming
+matrix_hookshot_generic_maxExpiryTime: "30d"  # noqa var-naming
 
 
 matrix_hookshot_feeds_enabled: true

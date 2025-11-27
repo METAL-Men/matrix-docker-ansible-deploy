@@ -1,3 +1,88 @@
+# 2025-11-23
+
+## Matrix.to support
+
+The playbook now supports [Matrix.to](https://github.com/matrix-org/matrix.to) — a simple URL redirection service which powers [matrix.to](https://matrix.to).
+
+To learn more, see our [Setting up Matrix.to](docs/configuring-playbook-matrixto.md) documentation page.
+
+# 2025-11-09
+
+## matrix-appservice-webhooks has been removed from the playbook
+
+[matrix-appservice-webhooks](./docs/configuring-playbook-bridge-appservice-webhooks.md) has been removed from the playbook, as it has been deprecated since more than several years.
+
+The playbook will let you know if you're using any `matrix_appservice_webhooks_*` variables. You'll need to remove them from `vars.yml` and potentially [uninstall the bridge manually](./docs/configuring-playbook-bridge-appservice-webhooks.md#uninstalling-the-bridge-manually).
+
+## mautrix-facebook and mautrix-instagram have been removed from the playbook
+
+[mautrix-facebook](./docs/configuring-playbook-bridge-mautrix-facebook.md) and [mautrix-instagram](./docs/configuring-playbook-bridge-mautrix-instagram.md) have been removed from the playbook, as they have been deprecated in favor of the [mautrix-meta](https://github.com/mautrix/meta) Messenger/Instagram bridge, integrated to the playbook at [2024-02-19](#2024-02-19).
+
+The playbook will let you know if you're using any variables for those bridges:
+
+- `matrix_mautrix_facebook_*`
+- `matrix_mautrix_instagram_*`
+
+You'll need to remove them from `vars.yml` and potentially uninstall them manually. Consult pages below for details:
+
+- [Instruction for mautrix-facebook](./docs/configuring-playbook-bridge-mautrix-facebook.md#uninstalling-the-bridge-manually)
+- [Instruction for mautrix-instagram](./docs/configuring-playbook-bridge-mautrix-instagram.md#uninstalling-the-bridge-manually)
+
+# 2025-11-08
+
+## MatrixZulipBridge support
+
+Thanks to [Suguru Hirahara](https://github.com/luixxiul), the playbook now supports the [GearKite/MatrixZulipBridge](https://github.com/GearKite/MatrixZulipBridg) bridge for bridging Matrix to [Zulip](https://zulip.com/).
+
+To learn more, see our [Setting up Zulip bridging](docs/configuring-playbook-bridge-zulip.md) documentation page.
+
+# 2025-11-07
+
+## The matrix-chatgpt-bot has been removed from the playbook
+
+The [matrix-bot-chatgpt](./docs/configuring-playbook-bot-chatgpt.md) has been removed from the playbook, as it has been deprecated since September 2024.
+
+The playbook will let you know if you're using any `matrix_bot_chatgpt_*` variables. You'll need to remove them from `vars.yml` and potentially [uninstall the bot manually](./docs/configuring-playbook-bot-chatgpt.md#uninstalling-matrix-chatgpt-bot-manually).
+
+# 2025-11-05
+
+## The MX Puppet bridges for Discord, Instagram, Slack, and Twitter have been removed from the playbook
+
+The MX Puppet bridges for Discord, Instagram, Slack, and Twitter have been removed from the playbook, as they have been unmaintained for more than several years and do not support important features like authenticated media. See [this issue](https://github.com/spantaleev/matrix-docker-ansible-deploy/issues/3867) for the context.
+
+The playbook will let you know if you're using any variables for those bridges:
+
+- `matrix_mx_puppet_discord_*`
+- `matrix_mx_puppet_instagram_*`
+- `matrix_mx_puppet_slack_*`
+- `matrix_mx_puppet_twitter_*`
+
+You'll need to remove them from `vars.yml` and potentially uninstall them manually. Consult pages below for details:
+
+- [Instruction for MX Puppet Discord bridge](./docs/configuring-playbook-bridge-mx-puppet-discord.md#uninstalling-the-bridge-manually)
+- [Instruction for MX Puppet Instagram bridge](./docs/configuring-playbook-bridge-mx-puppet-instagram.md#uninstalling-the-bridge-manually)
+- [Instruction for MX Puppet Slack bridge](./docs/configuring-playbook-bridge-mx-puppet-slack.md#uninstalling-the-bridge-manually)
+- [Instruction for MX Puppet Twitter bridge](./docs/configuring-playbook-bridge-mx-puppet-twitter.md#uninstalling-the-bridge-manually)
+
+# 2025-11-04
+
+## The Go Skype bridge has been removed from the playbook
+
+The [go-skype-bridge](./docs/configuring-playbook-bridge-go-skype-bridge.md) has been removed from the playbook, as Skype has been discontinued since the May 2025.
+
+The playbook will let you know if you're using any `matrix_go_skype_bridge_*` variables. You'll need to remove them from `vars.yml` and potentially [uninstall the bridge manually](./docs/configuring-playbook-bridge-go-skype-bridge.md#uninstalling-the-bridge-manually).
+
+# 2025-10-02
+
+## Element Admin support
+
+The playbook now supports [Element Admin](./docs/configuring-playbook-element-admin.md) - a new web-based administration panel for Synapse and [Matrix Authentication Service](./docs/configuring-playbook-matrix-authentication-service.md).
+
+Deployments based on Matrix Authentication Service may find it useful to run both Synapse Admin and Element Admin at the same time.
+
+Deployments that don't rely on Matrix Authentication Service are unlikely to find anything useful in Element Admin right now (it's too basic in its current form).
+
+
 # 2025-04-26
 
 ## Continuwuity support
@@ -156,7 +241,7 @@ To **completely eliminate the problem** of DDoS amplification attacks done throu
 
 The playbook now **only exposes the Coturn STUN port (`3478`) over TCP by default**.
 
-💡 Users may wish to further remove the (now unnnecessary) firewall rule allowing access to `3478/udp`.
+💡 Users may wish to further remove the (now unnecessary) firewall rule allowing access to `3478/udp`.
 
 If you'd like the Coturn STUN port to be exposed over UDP like before, you can revert to the previous behavior by using the following configuration in your `vars.yml` file:
 
@@ -170,7 +255,7 @@ matrix_coturn_container_stun_plain_host_bind_port_udp: "3478"
 
 # 2025-02-17
 
-## FluffyChat Web suport
+## FluffyChat Web support
 
 Thanks to [Aine](https://gitlab.com/etke.cc) of [etke.cc](https://etke.cc/), the playbook now supports [FluffyChat Web](https://github.com/krille-chan/fluffychat) as an additional Matrix client you can self-host.
 
@@ -192,7 +277,7 @@ The playbook will let you know if you're using any `matrix_mautrix_hangouts_*` v
 
 ## Redis and KeyDB are no longer part of the playbook
 
-**TLDR**: The playbook now exclusively uses Valkey as its Redis-compatible memorystore implementation, removing support for Redis and KeyDB. Most users are unaffected by this change unless they explicitly configured Redis or KeyDB variables. Only users that were explicitly definining `redis_*` or `keydb_*` variables will need to update their configuration to use `valkey_*` variables instead.
+**TLDR**: The playbook now exclusively uses Valkey as its Redis-compatible memorystore implementation, removing support for Redis and KeyDB. Most users are unaffected by this change unless they explicitly configured Redis or KeyDB variables. Only users that were explicitly defining `redis_*` or `keydb_*` variables will need to update their configuration to use `valkey_*` variables instead.
 
 The playbook has gone through several iterations of memorystore implementations:
 
@@ -745,7 +830,7 @@ For people building commercial products on top of Synapse, they may have to eith
 
 We're no lawyers and this changelog entry does not aim to give you the best legal advice, so please research on your own!
 
-If you'd like to continue using the old Apache-2.0-licensed Synapse (for a while longer anyway), the playbook makes it possible by intruducing a new Ansible variable. You can do it like this:
+If you'd like to continue using the old Apache-2.0-licensed Synapse (for a while longer anyway), the playbook makes it possible by introducing a new Ansible variable. You can do it like this:
 
 ```yaml
 # Switch the organization that Synapse container images (or source code for self-building) are pulled from.
@@ -828,7 +913,7 @@ Despite these downsides (which the playbook manages automatically), we believe i
 
 People running the default Traefik setup do not need to do anything to make Traefik take on this extra job. Your Traefik configuration will be updated automatically.
 
-**People runnning their own Traefik reverse-proxy need to do [minor adjustments](#people-managing-their-own-traefik-instance-need-to-do-minor-changes)**, as described in the section below.
+**People running their own Traefik reverse-proxy need to do [minor adjustments](#people-managing-their-own-traefik-instance-need-to-do-minor-changes)**, as described in the section below.
 
 You may disable Traefik acting as an intermediary by explicitly setting `matrix_playbook_public_matrix_federation_api_traefik_entrypoint_enabled` to `false`. Services would then be configured to talk to the homeserver directly, giving you a slight performance boost and a "simpler" Traefik setup. However, such a configuration is less tested and will cause troubles, especially if you enable more services (like `matrix-media-repo`, etc.) in the future. As such, it's not recommended.
 
@@ -2814,7 +2899,7 @@ See our [Migrating to Element Web](docs/configuring-playbook-riot-web.md#migrati
 
 ## Steam bridging support via mx-puppet-steam
 
-Thanks to [Hugues Morisset](https://github.com/izissise)'s efforts, the playbook now supports bridging to [Steam](https://steamapp.com/) via the [mx-puppet-steam](https://github.com/icewind1991/mx-puppet-steam) bridge. See our [Setting up MX Puppet Steam bridging](docs/configuring-playbook-bridge-mx-puppet-steam.md) documentation page for getting started.
+Thanks to [Hugues Morisset](https://github.com/izissise)'s efforts, the playbook now supports bridging to [Steam](https://steamapp.com/) via the [mx-puppet-steam](https://codeberg.org/icewind/mx-puppet-steam) bridge. See our [Setting up MX Puppet Steam bridging](docs/configuring-playbook-bridge-mx-puppet-steam.md) documentation page for getting started.
 
 
 # 2020-07-01
@@ -2851,7 +2936,7 @@ As always, re-running the playbook is enough to get the updated bits.
 
 ## SMS bridging requires db reset
 
-The current version of [matrix-sms-bridge](https://github.com/benkuly/matrix-sms-bridge) needs you to delete the database to work as expected. Just remove `/matrix/matrix-sms-bridge/database/*`. It also adds a new requried var `matrix_sms_bridge_default_region`.
+The current version of [matrix-sms-bridge](https://github.com/benkuly/matrix-sms-bridge) needs you to delete the database to work as expected. Just remove `/matrix/matrix-sms-bridge/database/*`. It also adds a new required var `matrix_sms_bridge_default_region`.
 
 To reuse your existing rooms, invite `@smsbot:yourServer` to the room or write a message. You are also able to use automated room creation with telephonenumers by writing `sms send -t 01749292923 "Hello World"` in a room with `@smsbot:yourServer`. See [the docs](https://github.com/benkuly/matrix-sms-bridge) for more information.
 
@@ -2883,7 +2968,7 @@ Until the issue gets fixed, we're making User Directory search not go to ma1sd b
 
 This upgrades matrix-appservice-irc from 0.14.1 to 0.16.0. Upstream
 made a change to how you define manual mappings. If you added a
-`mapping` to your configuration, you will need to update it accoring
+`mapping` to your configuration, you will need to update it according
 to the [upstream
 instructions](https://github.com/matrix-org/matrix-appservice-irc/blob/master/CHANGELOG.md#0150-2020-02-05). If you did not include `mappings` in your configuration for IRC, no
 change is necessary. `mappings` is not part of the default
@@ -3046,7 +3131,7 @@ As per this [advisory blog post](https://matrix.org/blog/2019/11/09/avoiding-unw
 
 Our general goal is to favor privacy and security when running personal (family & friends) and corporate homeservers. Both of these likely benefit from having a more secure default of **not showing the room directory without authentication** and **not publishing the room directory over federation**.
 
-As with anything else, these new defaults can be overriden by changing the `matrix_synapse_allow_public_rooms_without_auth` and `matrix_synapse_allow_public_rooms_over_federation` variables, respectively.
+As with anything else, these new defaults can be overridden by changing the `matrix_synapse_allow_public_rooms_without_auth` and `matrix_synapse_allow_public_rooms_over_federation` variables, respectively.
 
 
 # 2019-10-05
@@ -3600,7 +3685,7 @@ The following changes had to be done:
 
 - glue variables had to be introduced to the playbook, so it can wire together the various components. Those glue vars are stored in the [`group_vars/matrix-servers`](group_vars/matrix-servers) file. When overriding variables for a given component (role), you need to be aware of both the role defaults (`role/ROLE/defaults/main.yml`) and the role's corresponding section in the [`group_vars/matrix-servers`](group_vars/matrix-servers) file.
 
-- `matrix_postgres_use_external` has been superceeded by the more consistently named `matrix_postgres_enabled` variable and a few other `matrix_synapse_database_` variables. See the [Using an external PostgreSQL server (optional)](docs/configuring-playbook-external-postgres.md) documentation page for an up-to-date replacement.
+- `matrix_postgres_use_external` has been superseded by the more consistently named `matrix_postgres_enabled` variable and a few other `matrix_synapse_database_` variables. See the [Using an external PostgreSQL server (optional)](docs/configuring-playbook-external-postgres.md) documentation page for an up-to-date replacement.
 
 - Postgres tools (`matrix-postgres-cli` and `matrix-make-user-admin`) are no longer installed if you're not enabling the `matrix-postgres` role (`matrix_postgres_enabled: false`)
 
@@ -3789,7 +3874,7 @@ matrix_riot_web_integrations_jitsi_widget_url: "https://dimension.t2bot.io/widge
 
 There's now a new `matrix_nginx_proxy_ssl_protocols` playbook variable, which controls the SSL protocols used to serve Riot and Synapse. Its default value is `TLSv1.1 TLSv1.2`. This playbook previously used `TLSv1 TLSv1.1 TLSv1.2` to serve Riot and Synapse.
 
-You may wish to reenable TLSv1 if you need to access Riot in older browsers.
+You may wish to re-enable TLSv1 if you need to access Riot in older browsers.
 
 Note: Currently the dockerized nginx doesn't support TLSv1.3. See https://github.com/nginxinc/docker-nginx/issues/190 for more details.
 

@@ -1,4 +1,4 @@
-#jinja2: lstrip_blocks: "True"
+#jinja2: lstrip_blocks: True
 # Configuration file for Synapse.
 #
 # This is a YAML file: see [1] for a quick introduction. Note in particular
@@ -298,33 +298,33 @@ listeners:
     tls: true
     bind_addresses: ['::']
     type: http
-    x_forwarded: false
+    x_forwarded: {{ matrix_synapse_container_federation_api_tls_x_forwarded | to_json }}
 
     resources:
       - names: {{ matrix_synapse_federation_listener_resource_names|to_json }}
         compress: false
 {% endif %}
 
-  # Unsecure HTTP listener (Client API): for when Matrix traffic passes through a reverse proxy
+  # Insecure HTTP listener (Client API): for when Matrix traffic passes through a reverse proxy
   # that unwraps TLS.
   - port: {{ matrix_synapse_container_client_api_port|to_json }}
     tls: false
     bind_addresses: ['::']
     type: http
-    x_forwarded: true
+    x_forwarded: {{ matrix_synapse_container_client_api_x_forwarded | to_json }}
 
     resources:
       - names: {{ matrix_synapse_http_listener_resource_names|to_json }}
         compress: false
 
 {% if matrix_synapse_federation_port_enabled %}
-  # Unsecure HTTP listener (Federation API): for when Matrix traffic passes through a reverse proxy
+  # Insecure HTTP listener (Federation API): for when Matrix traffic passes through a reverse proxy
   # that unwraps TLS.
   - port: {{ matrix_synapse_container_federation_api_plain_port|to_json }}
     tls: false
     bind_addresses: ['::']
     type: http
-    x_forwarded: true
+    x_forwarded: {{ matrix_synapse_container_federation_api_plain_x_forwarded | to_json }}
 
     resources:
       - names: {{ matrix_synapse_federation_listener_resource_names|to_json }}
@@ -391,7 +391,7 @@ manhole_settings:
 
 # How to reach the server admin, used in ResourceLimitError
 #
-#admin_contact: 'mailto:admin@example.com'
+admin_contact: {{ matrix_synapse_admin_contact | to_json }}
 
 # Global blocking
 #
@@ -1178,6 +1178,9 @@ url_preview_ip_range_whitelist: {{ matrix_synapse_url_preview_ip_range_whitelist
 #
 #  # blacklist any URL with a literal IPv4 address
 #  - netloc: '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+{% if matrix_synapse_url_preview_url_blacklist | length > 0 %}
+url_preview_url_blacklist: {{ matrix_synapse_url_preview_url_blacklist | to_json }}
+{% endif %}
 
 # The largest allowed URL preview spidering size in bytes
 #
@@ -1709,7 +1712,7 @@ old_signing_keys:
 # Additional security can be provided by configuring a `verify key`, which
 # will make synapse check that the response is signed by that key.
 #
-# This setting supercedes an older setting named `perspectives`. The old format
+# This setting supersedes an older setting named `perspectives`. The old format
 # is still supported for backwards-compatibility, but it is deprecated.
 #
 # 'trusted_key_servers' defaults to matrix.org, but using it will generate a
@@ -2550,6 +2553,8 @@ password_providers:
       bind_password: {{ matrix_synapse_ext_password_provider_ldap_bind_password | string|to_json }}
 {% endif %}
       filter: {{ matrix_synapse_ext_password_provider_ldap_filter | string|to_json }}
+      tls_options:
+        validate: {{ matrix_synapse_ext_password_provider_ldap_tls_options_validate | to_json }}
 {% endif %}
 {% endif %}
 
@@ -2644,6 +2649,9 @@ user_directory:
     #
     prefer_local_users: {{ matrix_synapse_user_directory_prefer_local_users | to_json }}
 
+    # If set to true, the search will only return local users. Defaults to false.
+    exclude_remote_users: {{ matrix_synapse_user_directory_exclude_remote_users | to_json }}
+
 
 # User Consent configuration
 #
@@ -2726,6 +2734,15 @@ stats:
 #  system_mxid_display_name: "Server Notices"
 #  system_mxid_avatar_url: "mxc://example.com/oumMVlgDnLYFaPVkExemNVVZ"
 #  room_name: "Server Notices"
+{% if matrix_synapse_server_notices_enabled %}
+server_notices:
+  system_mxid_localpart: {{ matrix_synapse_server_notices_system_mxid_localpart | string | to_json }}
+  system_mxid_display_name: {{ matrix_synapse_server_notices_system_mxid_display_name | string | to_json }}
+{% if matrix_synapse_server_notices_system_mxid_avatar_url %}
+  system_mxid_avatar_url: {{ matrix_synapse_server_notices_system_mxid_avatar_url | string | to_json }}
+{% endif %}
+  room_name: {{ matrix_synapse_server_notices_room_name | string | to_json }}
+{% endif %}
 
 
 
@@ -2969,12 +2986,17 @@ background_updates:
     #
     #default_batch_size: 50
 
+
+{% if matrix_synapse_matrix_authentication_service_enabled %}
+matrix_authentication_service:
+  enabled: true
+  endpoint: {{ matrix_synapse_matrix_authentication_service_endpoint | to_json }}
+  secret: {{ matrix_synapse_matrix_authentication_service_secret | to_json }}
+{% endif %}
+
 experimental_features:
   {% if matrix_synapse_experimental_features_msc2409_to_device_messages_enabled %}
   msc2409_to_device_messages_enabled: true
-  {% endif %}
-  {% if matrix_synapse_experimental_features_msc3202_device_masquerading_enabled %}
-  msc3202_device_masquerading: true
   {% endif %}
   {% if matrix_synapse_experimental_features_msc3202_transaction_extensions_enabled %}
   msc3202_transaction_extensions: true
@@ -2982,22 +3004,8 @@ experimental_features:
   {% if matrix_synapse_experimental_features_msc3266_enabled %}
   msc3266_enabled: true
   {% endif %}
-  {% if matrix_synapse_experimental_features_msc3861_enabled %}
-  msc3861:
-    enabled: true
-    issuer: {{ matrix_synapse_experimental_features_msc3861_issuer | to_json }}
-    introspection_endpoint: {{ matrix_synapse_experimental_features_msc3861_introspection_endpoint | to_json }}
-    client_id: {{ matrix_synapse_experimental_features_msc3861_client_id | to_json }}
-    client_auth_method: {{ matrix_synapse_experimental_features_msc3861_client_auth_method | to_json }}
-    client_secret: {{ matrix_synapse_experimental_features_msc3861_client_secret | to_json }}
-    admin_token: {{ matrix_synapse_experimental_features_msc3861_admin_token | to_json }}
-    account_management_url: {{ matrix_synapse_experimental_features_msc3861_account_management_url | to_json }}
-  {% endif %}
   {% if matrix_synapse_experimental_features_msc4108_enabled %}
   msc4108_enabled: true
-  {% endif %}
-  {% if matrix_synapse_experimental_features_msc4133_enabled %}
-  msc4133_enabled: true
   {% endif %}
   {% if matrix_synapse_experimental_features_msc4140_enabled %}
   msc4140_enabled: true

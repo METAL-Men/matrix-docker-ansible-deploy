@@ -16,8 +16,6 @@ Hookshot can bridge [Webhooks](https://en.wikipedia.org/wiki/Webhook) from softw
 
 See the project's [documentation](https://matrix-org.github.io/matrix-hookshot/latest/hookshot.html) to learn what it does and why it might be useful to you.
 
-**Note**: the playbook also supports [matrix-appservice-webhooks](configuring-playbook-bridge-appservice-webhooks.md), which however was deprecated by its author.
-
 ## Prerequisites
 
 ### Download GitHub app private key (optional)
@@ -35,7 +33,7 @@ matrix_hookshot_enabled: true
 
 # Uncomment to enable end-to-bridge encryption.
 # See: https://matrix-org.github.io/matrix-hookshot/latest/advanced/encryption.html
-# matrix_hookshot_experimental_encryption_enabled: true
+# matrix_hookshot_encryption_enabled: true
 
 # Uncomment and paste the contents of GitHub app private key to enable GitHub bridge.
 # Alternatively, you can use one of the other methods explained below on the "Manage GitHub Private Key with aux role" section.
@@ -131,10 +129,6 @@ aux_file_definitions:
 
 For more information, see the documentation in the [default configuration of the aux role](https://github.com/mother-of-all-self-hosting/ansible-role-aux/blob/main/defaults/main.yml).
 
-### Collision with matrix-appservice-webhooks
-
-If you are also running [matrix-appservice-webhooks](configuring-playbook-bridge-appservice-webhooks.md), it reserves its namespace by the default setting `matrix_appservice_webhooks_user_prefix: '_webhook_'`. You should take care if you modify its or hookshot's prefix that they do not collide with each other's namespace (default `matrix_hookshot_generic_userIdPrefix: '_webhooks_'`).
-
 ### Enable metrics
 
 The playbook can enable and configure the metrics of the service for you.
@@ -167,7 +161,7 @@ To `matrix_hookshot_container_labels_metrics_middleware_basic_auth_users`, set t
 
 #### Enable Grafana (optional)
 
-Probably you wish to enable Grafana along with Prometheus for generating graphs of the metics.
+Probably you wish to enable Grafana along with Prometheus for generating graphs of the metrics.
 
 To enable Grafana, see [this section](configuring-playbook-prometheus-grafana.md#adjusting-the-playbook-configuration-grafana) for instructions.
 
